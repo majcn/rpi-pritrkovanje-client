@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prettier": "prettier 'src/**/*.tsx' 'src/**/*.ts'",
+    "prettier:write": "prettier --write 'src/**/*.tsx' 'src/**/*.ts'",
+    "lint": "eslint src --ext .ts --ext .tsx",
+    "lint:fix": "eslint src --ext .ts --ext .tsx --fix"
   },
   "dependencies": {
     "abcjs": "^6.0.0-beta.36",
@@ -21,7 +25,10 @@
     "@types/webaudioapi": "^0.0.27",
     "@vitejs/plugin-react": "^1.1.4",
     "autoprefixer": "^10.4.2",
+    "eslint": "^8.7.0",
+    "eslint-config-airbnb-typescript-prettier": "^5.0.0",
     "postcss": "^8.4.5",
+    "prettier": "^2.5.1",
     "tailwindcss": "^3.0.15",
     "typescript": "^4.5.4",
     "vite": "^2.7.13"
