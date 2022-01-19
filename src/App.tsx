@@ -1,45 +1,38 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { useState } from 'react';
+import { Container, MainLayout } from './Components/Layout';
+import Music from './Components/Music';
+import Sidebar from './Components/Siderbar';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const zvonovi = [
+    useState(false),
+    useState(false),
+    useState(false),
+    useState(false),
+  ];
+
+  const items = [
+    { title: 'Prvi zvon', active: zvonovi[0][0] },
+    { title: 'Drugi zvon', active: zvonovi[1][0] },
+    { title: 'Tretji zvon', active: zvonovi[2][0] },
+    { title: 'Četrti zvon', active: zvonovi[3][0] },
+  ];
+
+  const handleSidebarClick = (item: string) => {
+    const i = items.findIndex((x) => x.title === item);
+    const [z, s] = zvonovi[i];
+    s(!z);
+  };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+    <MainLayout>
+      <Container>
+        <Music items={items} songAbcUrl="/api/state/song.abc" />
+      </Container>
+
+      <Sidebar items={items} onItemClick={handleSidebarClick} />
+    </MainLayout>
+  );
 }
 
-export default App
+export default App;
