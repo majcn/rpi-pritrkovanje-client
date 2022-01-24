@@ -1,5 +1,4 @@
 import ABCJS from 'abcjs';
-import { createAudioContext } from '../util';
 import CursorControl from './CursorControl';
 
 class AbcPlayer {
@@ -9,94 +8,94 @@ class AbcPlayer {
 
   private timingCallbacks!: ABCJS.TimingCallbacks;
 
-  private readonly audioContext = createAudioContext();
-
   private readonly midiBuffer = new ABCJS.synth.CreateSynth();
 
   private voicesOff = [] as number[];
 
-  private currentLocation = 0;
-
   private isPlaying = false;
 
-  init(song: string, paperEl: HTMLDivElement) {
-    [this.visualObj] = ABCJS.renderAbc(paperEl, song, {
-      responsive: 'resize',
-      clickListener: this.visualObj__ClickListener.bind(this),
-    });
-
-    if (this.cursorControl !== undefined) {
-      this.cursorControl.onFinished();
-    }
-
-    this.cursorControl = new CursorControl(
-      paperEl.getElementsByTagName('svg')[0]
-    );
-  }
-
-  async setVoicesOff(voicesOff: number[]) {
-    this.voicesOff = voicesOff;
-
-    if (this.isPlaying) {
-      this.stop();
-      await this.play();
-    }
-  }
-
-  async play() {
-    if (this.isPlaying) {
-      return;
-    }
-
-    await this.audioContext.resume();
-
+  private async initMidiBuffer() {
     await this.midiBuffer.init({
-      audioContext: this.audioContext,
       visualObj: this.visualObj,
       options: {
         voicesOff: this.voicesOff,
       },
     });
 
-    if (this.timingCallbacks !== undefined) {
-      this.timingCallbacks.stop();
-    }
-
+    this.timingCallbacks?.stop();
     this.timingCallbacks = new ABCJS.TimingCallbacks(this.visualObj, {
       beatCallback: this.timing__beatCallback.bind(this),
       eventCallback: this.timing__eventCallback.bind(this),
     });
 
     await this.midiBuffer.prime();
+  }
 
-    this.cursorControl.onStart();
+  private async reloadMidi() {
+    const currentTrackMilliseconds =
+      this.timingCallbacks?.currentMillisecond() ?? 0;
 
-    this.midiBuffer.seek(this.currentLocation, 'seconds');
-    this.timingCallbacks.setProgress(this.currentLocation, 'seconds');
-    this.midiBuffer.start();
+    await this.initMidiBuffer();
+
+    if (this.isPlaying) {
+      this.stop();
+      this.play();
+    }
+
+    this.seek(currentTrackMilliseconds);
+  }
+
+  public init(song: string, paperEl: HTMLDivElement) {
+    [this.visualObj] = ABCJS.renderAbc(paperEl, song, {
+      responsive: 'resize',
+      clickListener: this.visualObj__ClickListener.bind(this),
+    });
+
+    this.cursorControl?.onFinished();
+    this.cursorControl = new CursorControl(
+      paperEl.getElementsByTagName('svg')[0]
+    );
+
+    this.initMidiBuffer();
+  }
+
+  public setVoicesOff(voicesOff: number[]) {
+    this.voicesOff = voicesOff;
+    this.reloadMidi();
+  }
+
+  public play() {
+    if (this.isPlaying) {
+      return;
+    }
+
+    this.midiBuffer.resume();
     this.timingCallbacks.start();
     this.isPlaying = true;
   }
 
-  stop() {
+  public seek(currentTrackMilliseconds: number) {
+    const currentTrackSeconds = currentTrackMilliseconds / 1000;
+
+    this.midiBuffer.seek(currentTrackSeconds, 'seconds');
+    this.timingCallbacks.setProgress(currentTrackSeconds, 'seconds');
+  }
+
+  public stop() {
     if (this.isPlaying) {
-      this.currentLocation = this.midiBuffer.pause();
+      this.midiBuffer.pause();
       this.timingCallbacks.pause();
       this.isPlaying = false;
     }
   }
 
   private visualObj__ClickListener(abcElem: ABCJS.AbcElem) {
-    this.midiBuffer.seek(abcElem.counters.note, 'beats');
-    this.timingCallbacks.setProgress(abcElem.counters.note, 'beats');
-    this.stop();
-    this.play();
+    this.seek(abcElem.currentTrackMilliseconds);
   }
 
   private timing__beatCallback(beatNumber: number, totalBeats: number) {
     if (beatNumber === totalBeats) {
-      this.midiBuffer.seek(0);
-      this.timingCallbacks.setProgress(0);
+      this.seek(0);
     }
   }
 
