@@ -5,10 +5,10 @@ import Sidebar from './Components/Siderbar';
 
 function App() {
   const zvonovi = [
-    useState(false),
-    useState(false),
-    useState(false),
-    useState(false),
+    useState(true),
+    useState(true),
+    useState(true),
+    useState(true),
   ];
 
   const items = [
