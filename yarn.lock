@@ -444,10 +444,10 @@
     react-refresh "^0.11.0"
     resolve "^1.20.0"
 
-abcjs@^6.0.0-beta.36:
-  version "6.0.0-beta.36"
-  resolved "https://registry.yarnpkg.com/abcjs/-/abcjs-6.0.0-beta.36.tgz#d4ead662b0600b8ad3b336cc36a046d887bc8226"
-  integrity sha512-VUFcKG/wp1grrGP0T9+thut781SI+UTTOeL/Xv96MYDJ2d5UNu4GSLS5JcvhDgFa++gU3TuTSeLx92WC1cQQtg==
+abcjs@^6.0.0-beta.37:
+  version "6.0.0-beta.37"
+  resolved "https://registry.yarnpkg.com/abcjs/-/abcjs-6.0.0-beta.37.tgz#90fe3219b55d2931ba52bd56a5b3611f7a3fc185"
+  integrity sha512-qzp9isGjxigArWzeSlNuDyHH3mN4wbAAcCdIqHXyvCSxCEO/JPKm32icC8xhIL1/5vxhaTaPojeJ04mlij1oeA==
 
 acorn-jsx@^5.3.1:
   version "5.3.2"

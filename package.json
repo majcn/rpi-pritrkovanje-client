@@ -13,7 +13,7 @@
     "lint:fix": "eslint src --ext .ts --ext .tsx --fix"
   },
   "dependencies": {
-    "abcjs": "^6.0.0-beta.36",
+    "abcjs": "^6.0.0-beta.37",
     "font-awesome": "^4.7.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
