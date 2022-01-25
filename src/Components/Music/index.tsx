@@ -31,7 +31,7 @@ function Music({ items, songAbcUrl }: Props) {
 
   return (
     <>
-      <div className="inline-flex">
+      <div className="fixed bottom-20 md:bottom-5 right-5 z-10">
         <button
           type="button"
           className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
