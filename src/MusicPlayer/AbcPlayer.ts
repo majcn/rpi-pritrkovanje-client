@@ -12,18 +12,23 @@ class AbcPlayer {
 
   private voicesOff = [] as number[];
 
+  private readonly defaultBpm = 120;
+  private bpm = this.defaultBpm;
+
   private isPlaying = false;
 
   private async initMidiBuffer() {
     await this.midiBuffer.init({
       visualObj: this.visualObj,
       options: {
+        qpm: this.bpm,
         voicesOff: this.voicesOff,
       },
     });
 
     this.timingCallbacks?.stop();
     this.timingCallbacks = new ABCJS.TimingCallbacks(this.visualObj, {
+      qpm: this.bpm,
       beatCallback: this.timing__beatCallback.bind(this),
       eventCallback: this.timing__eventCallback.bind(this),
     });
@@ -45,8 +50,22 @@ class AbcPlayer {
     this.seek(currentTrackMilliseconds);
   }
 
-  public init(song: string, paperEl: HTMLDivElement) {
-    [this.visualObj] = ABCJS.renderAbc(paperEl, song, {
+  public init(
+    song: string,
+    paperEl: HTMLDivElement
+  ): { title: string; bpm: number } {
+    const titleRe = /^T: (.*)$/gm;
+    const bpmRe = /^Q: (\d+)$/gm;
+
+    const title = titleRe.exec(song)?.[1] ?? 'No title';
+    const bpm = Number(bpmRe.exec(song)?.[1] ?? this.defaultBpm);
+
+    const songToParse = song
+      .replace(titleRe, '')
+      .replace(bpmRe, '')
+      .replaceAll('\n\n', '\n');
+
+    [this.visualObj] = ABCJS.renderAbc(paperEl, songToParse, {
       responsive: 'resize',
       clickListener: this.visualObj__ClickListener.bind(this),
     });
@@ -56,7 +75,19 @@ class AbcPlayer {
       paperEl.getElementsByTagName('svg')[0]
     );
 
+    this.bpm = bpm;
+
     this.initMidiBuffer();
+
+    return {
+      title,
+      bpm,
+    };
+  }
+
+  public setTempo(bpm: number) {
+    this.bpm = bpm;
+    this.reloadMidi();
   }
 
   public setVoicesOff(voicesOff: number[]) {
