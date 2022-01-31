@@ -1,5 +1,3 @@
-import Ticker from 'react-ticker'
-
 import {
   App,
   Page,
