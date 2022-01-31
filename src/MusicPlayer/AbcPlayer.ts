@@ -69,6 +69,8 @@ class AbcPlayer {
       return;
     }
 
+    ABCJS.synth.activeAudioContext().resume();
+
     this.midiBuffer.resume();
     this.timingCallbacks.start();
     this.isPlaying = true;
