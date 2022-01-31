@@ -13,6 +13,7 @@ class AbcPlayer {
   private voicesOff = [] as number[];
 
   private readonly defaultBpm = 120;
+
   private bpm = this.defaultBpm;
 
   private isPlaying = false;

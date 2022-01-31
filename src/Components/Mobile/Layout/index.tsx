@@ -70,6 +70,7 @@ function Layout({
         <Tabbar labels className="left-0 bottom-0 fixed">
           {bells.map((bell, i) => (
             <TabbarLink
+              // eslint-disable-next-line react/no-array-index-key
               key={i}
               active={bell}
               onClick={() => onBellClick(i)}
