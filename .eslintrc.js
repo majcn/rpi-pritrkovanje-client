@@ -15,8 +15,9 @@ module.exports = {
       files: ['*.{jsx,ts,tsx}'],
       extends: ['airbnb-typescript-prettier'],
       rules: {
-        'react/react-in-jsx-scope': 'off',
+        'jsx-a11y/anchor-is-valid': 'off',
         'jsx-a11y/click-events-have-key-events': 'off',
+        'react/react-in-jsx-scope': 'off',
       },
     },
   ],
