@@ -5,11 +5,13 @@ import { development } from '../../util';
 import './style.css';
 
 type Props = {
-  items: { title: string; active: boolean }[];
+  bells: boolean[];
   songAbcUrl: string;
+  setTempo: (bpm: number) => void;
+  setTitle: (title: string) => void;
 };
 
-function Music({ items, songAbcUrl }: Props) {
+function Music({ bells, songAbcUrl, setTempo, setTitle }: Props) {
   const paperElRef = useRef<HTMLDivElement>(null);
   const { data } = useFetch<string>(songAbcUrl, {
     formatter: (response) => response.text(),
@@ -17,48 +19,26 @@ function Music({ items, songAbcUrl }: Props) {
 
   useEffect(() => {
     if (paperElRef.current !== null) {
-      AbcPlayer.init(data ?? development.songAsData, paperElRef.current);
+      const { title, bpm } = AbcPlayer.init(
+        data ?? development.songAsData,
+        paperElRef.current
+      );
+
+      setTitle(title);
+      setTempo(bpm);
     }
-  }, [data]);
+  }, [data, setTempo, setTitle]);
 
   useEffect(() => {
-    const voicesOff = items
-      .map((x, i) => (x.active ? -1 : i))
-      .filter((x) => x !== -1);
+    const voicesOff = bells.map((x, i) => (x ? -1 : i)).filter((x) => x !== -1);
 
     AbcPlayer.setVoicesOff(voicesOff);
-  }, [items]);
+  }, [bells]);
 
   return (
-    <>
-      <div className="fixed bottom-20 md:bottom-5 right-5 z-10">
-        <button
-          type="button"
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-l"
-          onClick={() => AbcPlayer.play()}
-        >
-          Play
-        </button>
-        <button
-          type="button"
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4"
-          onClick={() => AbcPlayer.stop()}
-        >
-          Stop
-        </button>
-        <button
-          type="button"
-          className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-r"
-          onClick={() => AbcPlayer.seek(0)}
-        >
-          Revert
-        </button>
-      </div>
-
-      <div className="w-full lg:w-[750px] inline-block align-middle text-center">
-        <div ref={paperElRef} />
-      </div>
-    </>
+    <div className="w-full lg:w-[750px] inline-block align-middle text-center">
+      <div ref={paperElRef} />
+    </div>
   );
 }
 
