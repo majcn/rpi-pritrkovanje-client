@@ -1,6 +1,8 @@
 import ABCJS from 'abcjs';
 import CursorControl from './CursorControl';
 
+import { getCurrentTrackMilliseconds } from './tempo-hack';
+
 class AbcPlayer {
   private cursorControl!: CursorControl;
 
@@ -17,6 +19,8 @@ class AbcPlayer {
   private bpm = this.defaultBpm;
 
   private isPlaying = false;
+
+  private onIsPlayingChangeListener!: (isPlaying: boolean) => void;
 
   private async initMidiBuffer() {
     await this.midiBuffer.init({
@@ -62,12 +66,13 @@ class AbcPlayer {
     const bpm = Number(bpmRe.exec(song)?.[1] ?? this.defaultBpm);
 
     const songToParse = song
-      .replace(titleRe, '')
+      // .replace(titleRe, '')
       .replace(bpmRe, '')
       .replaceAll('\n\n', '\n');
 
     [this.visualObj] = ABCJS.renderAbc(paperEl, songToParse, {
       responsive: 'resize',
+      initialClef: true,
       clickListener: this.visualObj__ClickListener.bind(this),
     });
 
@@ -123,8 +128,21 @@ class AbcPlayer {
     }
   }
 
+  public setOnIsPlayingChangeListener(listener: (isPlaying: boolean) => void) {
+    this.onIsPlayingChangeListener = listener;
+  }
+
   private visualObj__ClickListener(abcElem: ABCJS.AbcElem) {
-    this.seek(abcElem.currentTrackMilliseconds);
+    const currentTrackMilliseconds = getCurrentTrackMilliseconds(
+      abcElem,
+      this.timingCallbacks,
+      this.visualObj
+    );
+
+    this.seek(currentTrackMilliseconds);
+
+    this.play();
+    this.onIsPlayingChangeListener(true);
   }
 
   private timing__beatCallback(beatNumber: number, totalBeats: number) {
