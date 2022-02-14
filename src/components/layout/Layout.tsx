@@ -4,16 +4,13 @@ import {
   Navbar,
   Block,
   Tabbar,
-  TabbarLink,
   NavbarBackLink,
-  Icon,
   BlockTitle,
   List,
   ListItem,
 } from 'konsta/react';
 
-import { IoIosFolderOpen, IoMdFolderOpen } from 'react-icons/io';
-
+import SelectSongTabbarLink from './SelectSongTabbarLink';
 import BellTabbarLinkGroup from './BellTabbarLinkGroup';
 import PlayPauseTabbarLink from './PlayPauseTabbarLink';
 import TempoStepper from './TempoStepper';
@@ -25,6 +22,8 @@ type Props = {
 };
 
 function Layout({ theme, server, children }: Props) {
+  const tabbarLinkIconClassName = 'w-7 h-7';
+
   return (
     <App theme={theme} safeAreas>
       <Page>
@@ -55,19 +54,9 @@ function Layout({ theme, server, children }: Props) {
         <Block className="mt-0 text-center">{children}</Block>
 
         <Tabbar labels className="left-0 bottom-0 fixed">
-          <TabbarLink
-            active
-            label={
-              <Icon
-                ios={<IoIosFolderOpen className="w-7 h-7" />}
-                material={<IoMdFolderOpen className="w-7 h-7" />}
-              />
-            }
-          />
-
-          <BellTabbarLinkGroup iconClassName="w-7 h-7" />
-
-          <PlayPauseTabbarLink iconClassName="w-7 h-7" />
+          <SelectSongTabbarLink iconClassName={tabbarLinkIconClassName} />
+          <BellTabbarLinkGroup iconClassName={tabbarLinkIconClassName} />
+          <PlayPauseTabbarLink iconClassName={tabbarLinkIconClassName} />
         </Tabbar>
       </Page>
     </App>
