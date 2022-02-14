@@ -1,28 +1,28 @@
 // import songAsData from './song.txt?raw';
 
 const songAsData = `X: 1
-T: Petka okrog na 3 zvonove (gorenjsko gostenje)
+T: Petka okrog na 3 zvonove (extra gorenjsko gostenje)
 M: 4/4
 L: 1/8
-K: B
+K: C
 Q: 120
-V:Z1 clef=alto name="Prvi zvon"
+V:Z1 clef=treble name="Prvi zvon"
 %%MIDI program 14
-| A, z z z z z z z | A, z z z z z z z | A, z z z A, z z z | 
-| A, z z A, z A, z A, | z A, z A, z A, z A, | z A, z A, z A, z A, | 
-| z A, z A, z A, z A, | z A, z z z z z z | z z A, z A, z A, z | 
-| z z A, z A, z A, z | z z A, z z z A, z | z z A, z A, z A, z |
-V:Z2 clef=alto name="Drugi zvon"
+| D z z z z z z z | D z z z z z z z | D z z z D z z z | 
+| D z z D z D z D | z D z D z D z D/2 D/2 | z D z D z D z D/2 D/2 | 
+| z D z D/2 D/2 z D z D/2 D/2 | z D z z z z z z | z z D z D z D z | 
+| z z D z D z D z | z z D z z z D z | z z D z D z D z |
+V:Z2 clef=treble name="Drugi zvon"
 %%MIDI program 14
-| z z C z C z C z | z z C z C z C z | z z C z z z C z | 
-| z z C z C z C z | C z z z z z z z | C z z z z z z z | 
-| C z z z C z z z | C z z C z C z C | z C z C z C z C | 
-| z C z C z C z C | z C z C z C z C | z C z z z z z z |
+| z z G z G z G z | z z G z G z G z | z z G z z z G z | 
+| z z G z G z G z | G z z z z z z z | G z z z z z z z | 
+| G z z z G z z z | G z z G z G z G | z G z G z G z G/2 G/2 |
+| z G z G z G z G/2 G/2 | z G z G/2 G/2 z G z G/2 G/2 | z G z z z z z z |
 V:Z3 clef=treble name="Tretji zvon"
 %%MIDI program 14
-| z E z E z E z E | z E z E z E z E | z E z E z E z E | 
-| z E z z z z z z | z z E z E z E z | z z E z E z E z | 
-| z z E z z z E z | z z E z E z E z | E z z z z z z z | 
-| E z z z z z z z | E z z z E z z z | E z z E z E z E |`;
+| z B z B z B z B | z B/2 B/2 z B z B z B | z B/2 B/2 z B z B/2 B/2 z B | 
+| z B/2 B/2 z z z z z z | z z B z B z B z | z z B z B z B z | 
+| z z B z z z B z | z z B z B z B z | B z z z z z z z | 
+| B z z z z z z z | B z z z B z z z | B z z B z B z B |`;
 
 export default { songAsData };
